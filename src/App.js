@@ -1,5 +1,6 @@
 import "./App.css";
 import Tabbar from "./comps/Tabbar";
+import Demo from "./Demo";
 import NoOfProjects from "./tables/NoOfProjects";
 import PredefinedCycle from "./tables/PredefinedCycle";
 
@@ -10,8 +11,9 @@ function App() {
         <Tabbar />
       </div>
       <div style={{ height: "calc(100vh - 50px)", overflow: "scroll" }}>
-        <PredefinedCycle />
+        {/* <PredefinedCycle /> */}
         {/* <NoOfProjects /> */}
+        <Demo minCellWidth={120} />
       </div>
     </div>
   );
