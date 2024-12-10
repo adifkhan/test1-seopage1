@@ -1,0 +1,18 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #00000038;
+  z-index: 1020;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content_wrapper {
+  padding: 20px;
+  background: white;
+  border-radius: 5px;
+}

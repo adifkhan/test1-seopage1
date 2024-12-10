@@ -1,14 +1,9 @@
-.table {
-  /* table-layout: fixed; */
-  td,
-  th {
-    /* overflow: hidden;
-    white-space: nowrap;
-    -moz-text-overflow: ellipsis;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis; */
-  }
+.tab_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 105;
 }
 .table_head {
   border-top: none;
@@ -24,95 +19,63 @@
     border-top: none;
   }
 }
-
 .sticky_top {
   position: sticky;
-  top: 0;
+  top: 176px;
   left: 0;
-  z-index: 1020;
+  filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.15));
+  z-index: 100;
 }
 .sticky_left {
   position: sticky;
   left: 0;
   background-color: #f8f9fa;
-  z-index: 1020;
+  filter: drop-shadow(3px 0 5px rgba(0, 0, 0, 0.1));
+  z-index: 99;
 }
-
-.resizable {
-  resize: horizontal;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  display: block;
-}
-
-/* ---------- demo styling ----------------- */
-.table-wrapper {
-  margin-bottom: 25px;
-  border-radius: 6px;
-  background: #fff;
-  /* overflow: hidden; */
-}
-
-table {
-  width: 100%;
-  display: grid;
-  overflow: auto;
-  grid-template-columns:
-    minmax(150px, 3fr)
-    minmax(150px, 1fr)
-    minmax(150px, 1fr)
-    minmax(150px, 1fr)
-    minmax(150px, 1fr);
-}
-
-table thead,
-table tbody,
-table tr {
-  display: contents;
-}
-
-table th {
-  position: relative;
-  font-size: 18px;
-}
-
-table th,
-table td {
-  text-align: left;
-  padding: 16px 20px;
+.search_input {
+  margin-top: 5px;
   min-width: 100px;
+  width: 100%;
+  border: 1.5px solid rgb(187, 186, 186);
+  border-radius: 3px;
+  &:focus {
+    outline: none;
+    border-color: #000;
+  }
 }
+.columns_stack {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 3px 10px;
 
-table th span,
-table td span {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  display: block;
+  &:hover {
+    border-color: rgb(199, 198, 198);
+  }
 }
-
-table tr td {
-  border-top: 1px solid #ccc;
-}
-
-.resize-handle {
-  display: block;
-  position: absolute;
-  cursor: col-resize;
-  width: 7px;
+.table_toolbar {
+  position: fixed;
+  top: 122px;
+  left: 0;
   right: 0;
-  top: 0;
-  z-index: 1;
-  border-right: 2px solid transparent;
+  z-index: 102;
+  background: white;
 }
-
-.resize-handle:hover {
-  border-color: #ccc;
+.dense_button {
+  transition: all 0.5s;
+  &:hover {
+    background: black;
+    color: white;
+  }
 }
+.no_scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-.resize-handle.active {
-  border-color: #517ea5;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -37,7 +37,8 @@ const headCells = [
   { id: "status", label: "Status" },
   { id: "project_completion_time", label: "Project Completion Time" },
 ];
-const NoOfProjects = ({ data }) => {
+
+const TotalProjectValue = ({ data }) => {
   const [visibleData, setVisibleData] = useState([]);
   const [visibleCol, setVisibleCol] = useState([...headCells]);
   const [columns, setColumns] = useState([...visibleCol]);
@@ -45,7 +46,7 @@ const NoOfProjects = ({ data }) => {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [density, setDensity] = useState("md");
 
-  // search column data
+  // update visible data
   useEffect(() => {
     if (searchData.id && searchData.text) {
       const filteredData = data.filter((item) =>
@@ -132,4 +133,4 @@ const NoOfProjects = ({ data }) => {
   );
 };
 
-export default NoOfProjects;
+export default TotalProjectValue;

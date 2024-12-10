@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
+import TableTools from "../comps/TableTools";
 
 const headCells = [
-  { id: "id", label: "#ID" },
   { id: "project_manager", label: "Project Manager" },
   {
     id: "no_of_projects_minimum_ideal_18",
-    label: `No. of Projects <span class="text-danger" style="font-size: 12px;">(Minimum Ideal 18)</span>`,
+    label: `No. of Projects <br/><span class="text-danger" style="font-size: 12px;">(Minimum Ideal 18)</span>`,
   },
   {
     id: "total_project_value_minimum_ideal_8000_usd",
-    label: `Total Project Value <span class="text-danger" style="font-size: 12px;">(Minimum Ideal 8000 USD)</span>`,
+    label: `Total Project Value <br/><span class="text-danger" style="font-size: 12px;">(Minimum Ideal 8000 USD)</span>`,
   },
   { id: "total_released_amount", label: "Total Released Amount" },
   { id: "no_of_fully_completed_project", label: "No. of Fully Completed Project" },
@@ -20,7 +20,7 @@ const headCells = [
   },
   {
     id: "project_completion_rate_minimum_ideal_85",
-    label: `Project Completion Rate <span class="text-danger" style="font-size: 12px;">(Minimum Ideal 85%)</span>`,
+    label: `Project Completion Rate <br/><span class="text-danger" style="font-size: 12px;">(Minimum Ideal 85%)</span>`,
   },
   {
     id: "project_completion_rate_without_authorization",
@@ -40,19 +40,25 @@ const headCells = [
   { id: "avg_payment_rel_time", label: "Avg. Payment Rel. Time" },
 ];
 
-const PredefinedCycle = () => {
-  const [data, setData] = useState([]);
-  const [columns, setColumns] = useState(headCells);
+const PredefinedCycle = ({ data }) => {
+  const [visibleData, setVisibleData] = useState([]);
+  const [visibleCol, setVisibleCol] = useState([...headCells]);
+  const [columns, setColumns] = useState([...visibleCol]);
+  const [searchData, setSearchData] = useState({ id: "", text: "" });
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const [density, setDensity] = useState("md");
 
+  // update visible data
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("https://retoolapi.dev/cV9K7f/predefined_cycle");
-      const jsonData = await response.json();
-      setData(jsonData);
-    };
-    fetchData();
-  }, []);
+    if (searchData.id && searchData.text) {
+      const filteredData = data.filter((item) =>
+        item[searchData.id].toString().toLowerCase().includes(searchData.text.toLowerCase())
+      );
+      setVisibleData(filteredData);
+    } else {
+      setVisibleData(data);
+    }
+  }, [data, searchData.id, searchData.text]);
 
   const swapColumns = (fromIndex, toIndex) => {
     const updatedHeaders = [...columns];
@@ -66,11 +72,21 @@ const PredefinedCycle = () => {
 
   return (
     <div>
-      <h2 className="text-center fs-3 fw-normal my-3">
-        Total Project: 63 <br /> Total Project Value: $75,600.00
-      </h2>
-      <Table bordered hover className="table">
-        <thead align="center" className="sticky_top position-sticky top-0 left-0">
+      <div className="table_toolbar">
+        {/* <h2 className="text-center fs-4 fw-medium mt-4 lh-base">
+          Total Project: 63 <br /> Total Project Value: $75,600.00
+        </h2> */}
+        <TableTools
+          density={density}
+          setDensity={setDensity}
+          visibleCol={visibleCol}
+          setVisibleCol={setVisibleCol}
+          columns={columns}
+          setColumns={setColumns}
+        />
+      </div>
+      <Table bordered hover style={{ margin: "176px 5px 5px" }}>
+        <thead align="center" className="sticky_top">
           <tr className="table_head">
             {columns.map((col, index) =>
               col.id === "no_of_projects_minimum_ideal_18" ||
@@ -78,73 +94,95 @@ const PredefinedCycle = () => {
               col.id === "project_completion_rate_minimum_ideal_85" ? (
                 <th
                   key={index}
-                  className="fw-medium px-3 bg-info"
+                  className="fw-medium bg-info p-1"
                   style={{ fontSize: "14px", cursor: "pointer" }}
                   draggable
                   onDragStart={() => setDraggedIndex(index)}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => swapColumns(draggedIndex, index)}
-                  data-resizable-column-id={col.id}
                 >
-                  <div dangerouslySetInnerHTML={{ __html: col.label }}></div>
+                  <label dangerouslySetInnerHTML={{ __html: col.label }} className="d-block" />
+                  <input
+                    type="text"
+                    className="search_input"
+                    placeholder="Search..."
+                    onChange={(e) => setSearchData({ id: col.id, text: e.target.value })}
+                  />
                 </th>
               ) : col.id === "project_manager" ? (
                 <th
                   key={index}
-                  className="fw-medium px-3 bg-info text-nowrap sticky_left"
-                  style={{
-                    fontSize: "14px",
-                    cursor: "pointer",
-                    zIndex: 102,
-                  }}
-                  draggable
-                  onDragStart={() => setDraggedIndex(index)}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => swapColumns(draggedIndex, index)}
-                  data-resizable-column-id={col.id}
-                >
-                  <div>{col.label}</div>
-                </th>
-              ) : (
-                <th
-                  key={index}
-                  className="fw-medium px-3 bg-info"
+                  className="sticky_left fw-medium bg-info p-1"
                   style={{ fontSize: "14px", cursor: "pointer" }}
                   draggable
                   onDragStart={() => setDraggedIndex(index)}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => swapColumns(draggedIndex, index)}
-                  data-resizable-column-id={col.id}
                 >
-                  <div>{col.label}</div>
+                  <label className="d-block">{col.label}</label>
+                  <input
+                    type="text"
+                    className="search_input"
+                    placeholder="Search..."
+                    onChange={(e) => setSearchData({ id: col.id, text: e.target.value })}
+                  />
+                </th>
+              ) : (
+                <th
+                  key={index}
+                  className="fw-medium bg-info p-1"
+                  style={{ fontSize: "14px", cursor: "pointer" }}
+                  draggable
+                  onDragStart={() => setDraggedIndex(index)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => swapColumns(draggedIndex, index)}
+                >
+                  <label className="d-block">{col.label}</label>
+                  <input
+                    type="text"
+                    className="search_input"
+                    placeholder="Search..."
+                    onChange={(e) => setSearchData({ id: col.id, text: e.target.value })}
+                  />
                 </th>
               )
             )}
           </tr>
         </thead>
         <tbody align="center">
-          {data.length > 0 &&
-            data?.map((row, rowIndex) => (
+          {visibleData.length > 0 ? (
+            visibleData?.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns?.map((col, colIndex) =>
                   col.id === "project_manager" ? (
                     <td
                       key={colIndex}
-                      className="sticky_left"
-                      style={{
-                        zIndex: 102,
-                      }}
+                      className={`sticky_left align-middle p-1 ${
+                        density === "md" ? "py-3" : density === "lg" ? "py-5" : "py-1"
+                      }`}
                     >
                       <div>{row?.[col.id]}</div>
                     </td>
                   ) : (
-                    <td key={colIndex}>
-                      <div>{row?.[col.id]}</div>
+                    <td
+                      key={colIndex}
+                      className={`align-middle p-1 ${
+                        density === "md" ? "py-3" : density === "lg" ? "py-5" : "py-1"
+                      }`}
+                    >
+                      {row?.[col.id]}
                     </td>
                   )
                 )}
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length} className="align-middle py-3">
+                No match found
+              </td>
+            </tr>
+          )}
         </tbody>
       </Table>
     </div>

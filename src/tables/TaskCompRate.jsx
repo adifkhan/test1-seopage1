@@ -13,6 +13,17 @@ const headCells = [
     id: "project_value",
     label: "Project Value",
   },
+  { id: "released_amount", label: "Released Amount" },
+  { id: "released_amount_percentage", label: "Released Amount (Percentage)" },
+  { id: "total_tasks", label: "Total Tasks" },
+  { id: "completed_tasks", label: "Completed Tasks" },
+  { id: "submitted_to_client", label: "Submitted to Client" },
+  { id: "under_review", label: "Under Review" },
+  { id: "revisions", label: "Revisions" },
+  {
+    id: "task_completion_time_how_many_tasks_he_completed_daily_for_that",
+    label: "Task Completion Time (How many tasks he completed daily for that project)",
+  },
   { id: "deal_closed_by", label: "Deal Closed By" },
   {
     id: "estimated_hours",
@@ -34,10 +45,15 @@ const headCells = [
   { id: "deliverables_signed_internally", label: "Deliverables Signed Internally" },
   { id: "project_progress_payment_wise", label: "Project Progress (Payment Wise)" },
   { id: "project_progress_task_completion_wise", label: "Project Progress (Task Completion Wise)" },
-  { id: "status", label: "Status" },
+  { id: "status_in_progress", label: "Status (In Progress)" },
   { id: "project_completion_time", label: "Project Completion Time" },
+  { id: "no_of_upsell_from_that_project", label: "No. of Upsell From That Project" },
+  { id: "value_of_upsale", label: "Value of Upsale" },
+  { id: "no_of_cross_sale_from_that_project", label: "No. of Cross Sale From That Project" },
+  { id: "value_of_cross_sale", label: "Value of Cross Sale" },
 ];
-const NoOfProjects = ({ data }) => {
+
+const TaskCompRate = ({ data }) => {
   const [visibleData, setVisibleData] = useState([]);
   const [visibleCol, setVisibleCol] = useState([...headCells]);
   const [columns, setColumns] = useState([...visibleCol]);
@@ -45,7 +61,7 @@ const NoOfProjects = ({ data }) => {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [density, setDensity] = useState("md");
 
-  // search column data
+  // update visible data
   useEffect(() => {
     if (searchData.id && searchData.text) {
       const filteredData = data.filter((item) =>
@@ -132,4 +148,4 @@ const NoOfProjects = ({ data }) => {
   );
 };
 
-export default NoOfProjects;
+export default TaskCompRate;
