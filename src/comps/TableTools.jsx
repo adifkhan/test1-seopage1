@@ -24,14 +24,14 @@ const TableTools = ({
       <div>
         <button
           type="button"
-          className="btn btn-outline-dark"
+          className="btn btn-dark fw-medium"
           onClick={() => setOpenFilterModal(true)}
         >
           Filter Columns
         </button>
       </div>
       <div className="d-flex align-items-center gap-3 ">
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2 px-3 border-end border-1 border-secondary">
           <button
             type="button"
             className={`btn btn-sm ${density === "lg" ? "btn-dark" : "btn-outline-dark"}`}
