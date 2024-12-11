@@ -12,7 +12,7 @@ const Tabbar = ({ tableTitles, activeTab, setActiveTab }) => {
             <span
               key={table.id}
               className={`table_title_btn  ${
-                activeTab.id === table.id && "bg-info border-dark-subtle text-white"
+                activeTab.id === table.id && "bg-info text-white shadow"
               }`}
               id={table.id}
               onClick={() => setActiveTab(table)}
