@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { AiOutlineMenu } from "react-icons/ai";
+import { swapColumns } from "../utils/myFunc";
 
 const CustomizeColumn = ({
   setOpen,
@@ -19,15 +20,6 @@ const CustomizeColumn = ({
     );
     setColumns(updatedColumns);
   }, [visibleCol, hiddenCol, setColumns]);
-
-  const swapColumns = (fromIndex, toIndex) => {
-    const updatedHeaders = [...visibleCol];
-
-    const [movedHeader] = updatedHeaders.splice(fromIndex, 1);
-    updatedHeaders.splice(toIndex, 0, movedHeader);
-
-    setVisibleCol(updatedHeaders);
-  };
 
   // filter columns
   const filterColumn = (event) => {
@@ -65,7 +57,7 @@ const CustomizeColumn = ({
             draggable
             onDragStart={() => setDraggedIndex(index)}
             onDragOver={(e) => e.preventDefault()}
-            onDrop={() => swapColumns(draggedIndex, index)}
+            onDrop={() => swapColumns(draggedIndex, index, visibleCol, setVisibleCol)}
           >
             <div className="d-flex align-items-center gap-2">
               <input

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Table from "react-bootstrap/Table";
 import TableTools from "../comps/TableTools";
+import { conditionalColumnFiltering, swapColumns } from "../utils/myFunc";
 
 const headCells = [
   { id: "id", label: "SL NO" },
@@ -76,61 +77,8 @@ const DelayedProject = ({ data }) => {
   }, [data, searchData.id, searchData.text]);
 
   const applyFilters = (filters) => {
-    const filteredData = data.filter((item) => {
-      const isMatch = filters.some((query) => {
-        const label = query.label;
-        const option = query.option.toLowerCase();
-        const value = query.value.toLowerCase();
-
-        if (item[label] !== undefined) {
-          const fieldValue = item[label].toString().toLowerCase();
-
-          switch (option) {
-            case "begins with":
-              return fieldValue.startsWith(value);
-            case "contains":
-              return fieldValue.includes(value);
-            case "greater than":
-              const numericFieldValueGT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
-              const numericQueryValueGT = parseFloat(value.replace(/[^0-9.]/g, ""));
-              return (
-                !isNaN(numericFieldValueGT) &&
-                !isNaN(numericQueryValueGT) &&
-                numericFieldValueGT > numericQueryValueGT
-              );
-            case "less than":
-              const numericFieldValueLT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
-              const numericQueryValueLT = parseFloat(value.replace(/[^0-9.]/g, ""));
-              return (
-                !isNaN(numericFieldValueLT) &&
-                !isNaN(numericQueryValueLT) &&
-                numericFieldValueLT < numericQueryValueLT
-              );
-            case "equal to":
-              return fieldValue === value;
-            case "not equal to":
-              return fieldValue !== value;
-            default:
-              return false;
-          }
-        }
-
-        return false;
-      });
-      return isMatch ? item : null;
-    });
-
+    const filteredData = conditionalColumnFiltering({ data, filters });
     setVisibleData(filteredData);
-  };
-
-  const swapColumns = (fromIndex, toIndex) => {
-    const updatedHeaders = [...columns];
-
-    // Swap headers
-    const [movedHeader] = updatedHeaders.splice(fromIndex, 1);
-    updatedHeaders.splice(toIndex, 0, movedHeader);
-
-    setColumns(updatedHeaders);
   };
 
   const handleMouseDown = (event, colIndex) => {
@@ -190,7 +138,7 @@ const DelayedProject = ({ data }) => {
                 draggable
                 onDragStart={() => setDraggedIndex(index)}
                 onDragOver={(e) => e.preventDefault()}
-                onDrop={() => swapColumns(draggedIndex, index)}
+                onDrop={() => swapColumns(draggedIndex, index, columns, setColumns)}
               >
                 <label className="d-block">{col.label}</label>
                 <input

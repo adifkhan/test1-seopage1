@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Table from "react-bootstrap/Table";
 import TableTools from "../comps/TableTools";
+import { conditionalColumnFiltering, swapColumns } from "../utils/myFunc";
 
 const PredefinedCycle = ({ data }) => {
   const [visibleData, setVisibleData] = useState([]);
@@ -21,7 +22,7 @@ const PredefinedCycle = ({ data }) => {
     };
   }, []);
 
-  // update visible data
+  // update visible data depending on column search
   useEffect(() => {
     if (searchData.id && searchData.text) {
       const filteredData = data.filter((item) =>
@@ -34,63 +35,11 @@ const PredefinedCycle = ({ data }) => {
   }, [data, searchData.id, searchData.text]);
 
   const applyFilters = (filters) => {
-    const filteredData = data.filter((item) => {
-      const isMatch = filters.some((query) => {
-        const label = query.label;
-        const option = query.option.toLowerCase();
-        const value = query.value.toLowerCase();
-
-        if (item[label] !== undefined) {
-          const fieldValue = item[label].toString().toLowerCase();
-
-          switch (option) {
-            case "begins with":
-              return fieldValue.startsWith(value);
-            case "contains":
-              return fieldValue.includes(value);
-            case "greater than":
-              const numericFieldValueGT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
-              const numericQueryValueGT = parseFloat(value.replace(/[^0-9.]/g, ""));
-              return (
-                !isNaN(numericFieldValueGT) &&
-                !isNaN(numericQueryValueGT) &&
-                numericFieldValueGT > numericQueryValueGT
-              );
-            case "less than":
-              const numericFieldValueLT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
-              const numericQueryValueLT = parseFloat(value.replace(/[^0-9.]/g, ""));
-              return (
-                !isNaN(numericFieldValueLT) &&
-                !isNaN(numericQueryValueLT) &&
-                numericFieldValueLT < numericQueryValueLT
-              );
-            case "equal to":
-              return fieldValue === value;
-            case "not equal to":
-              return fieldValue !== value;
-            default:
-              return false;
-          }
-        }
-
-        return false;
-      });
-      return isMatch ? item : null;
-    });
-
+    const filteredData = conditionalColumnFiltering({ data, filters });
     setVisibleData(filteredData);
   };
 
-  const swapColumns = (fromIndex, toIndex) => {
-    const updatedHeaders = [...columns];
-
-    // Swap headers
-    const [movedHeader] = updatedHeaders.splice(fromIndex, 1);
-    updatedHeaders.splice(toIndex, 0, movedHeader);
-
-    setColumns(updatedHeaders);
-  };
-
+  // functions for resizing columns
   const handleMouseDown = (event, colIndex) => {
     event.stopPropagation();
     resizingColumnRef.current = colIndex;
@@ -127,9 +76,6 @@ const PredefinedCycle = ({ data }) => {
   return (
     <div>
       <div className="table_toolbar">
-        {/* <h2 className="text-center fs-4 fw-medium mt-4 lh-base">
-          Total Project: 63 <br /> Total Project Value: $75,600.00
-        </h2> */}
         <TableTools
           density={density}
           setDensity={setDensity}
@@ -154,7 +100,7 @@ const PredefinedCycle = ({ data }) => {
                   draggable
                   onDragStart={() => setDraggedIndex(index)}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => swapColumns(draggedIndex, index)}
+                  onDrop={() => swapColumns(draggedIndex, index, columns, setColumns)}
                 >
                   <label dangerouslySetInnerHTML={{ __html: col.label }} className="d-block" />
                   <input
@@ -176,7 +122,7 @@ const PredefinedCycle = ({ data }) => {
                   draggable
                   onDragStart={() => setDraggedIndex(index)}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => swapColumns(draggedIndex, index)}
+                  onDrop={() => swapColumns(draggedIndex, index, columns, setColumns)}
                 >
                   <div className="position-relative w-100 h-100 p-1 pt-4">
                     <label className="d-block">{col.label}</label>
@@ -200,7 +146,7 @@ const PredefinedCycle = ({ data }) => {
                   draggable
                   onDragStart={() => setDraggedIndex(index)}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => swapColumns(draggedIndex, index)}
+                  onDrop={() => swapColumns(draggedIndex, index, columns, setColumns)}
                 >
                   <label className="d-block">{col.label}</label>
                   <input

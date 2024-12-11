@@ -18,11 +18,7 @@ import DelayedCompleted from "./tables/DelayedCompleted";
 
 function App() {
   const [data, setData] = useState([]);
-  const [activeTab, setActiveTab] = React.useState({
-    id: "predefined_cycle",
-    title: "Predefined Cycle",
-    apiUri: "https://retoolapi.dev/cV9K7f/predefined_cycle",
-  });
+  const [activeTab, setActiveTab] = React.useState(table_titles[0]);
 
   // get table data
   useEffect(() => {
