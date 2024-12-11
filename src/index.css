@@ -79,3 +79,18 @@
     display: none;
   }
 }
+
+.resize-handle {
+  width: 2px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 80;
+}
+.resize-handle:hover {
+  background-color: #807e7e;
+}

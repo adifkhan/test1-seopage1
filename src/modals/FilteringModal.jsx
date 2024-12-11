@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 
-const FilteringModal = ({ setOpen, columns }) => {
+const FilteringModal = ({ setOpen, columns, applyFilters }) => {
   const [error, setError] = useState("");
   const [filters, setFilters] = useState([]);
   const [filter, setFilter] = useState({
@@ -13,6 +13,7 @@ const FilteringModal = ({ setOpen, columns }) => {
   const handleAddFilter = () => {
     if (!filter.label || !filter.option || !filter.value) {
       setError("All fields are required");
+      return;
     } else {
       setFilters([...filters, filter]);
       setFilter({ label: "", option: "", value: "" });
@@ -20,12 +21,26 @@ const FilteringModal = ({ setOpen, columns }) => {
     }
   };
 
-  console.log("=>", filter);
+  const handleApplyFilter = () => {
+    if (!filters.length && (!filter.label || !filter.option || !filter.value)) {
+      setError("At least one filter required");
+      return;
+    }
+    if (!filter.label || !filter.option || !filter.value) {
+      applyFilters(filters);
+      setError("");
+      return;
+    } else {
+      applyFilters([...filters, filter]);
+      setError("");
+    }
+  };
+
   return (
     <div style={{ width: "min(80vw, 600px)" }}>
       <div className="d-flex align-items-center justify-content-between border-bottom pb-1">
         <h4 className="fw-medium fs-5">Filter Columns</h4>
-        <button type="button" class="btn btn-light" onClick={() => setOpen(false)}>
+        <button type="button" className="btn btn-light" onClick={() => setOpen(false)}>
           <RxCross1 size={20} />
         </button>
       </div>
@@ -46,12 +61,12 @@ const FilteringModal = ({ setOpen, columns }) => {
           {filters?.map((fltr, i) => (
             <div key={i} className="d-flex align-items-center justify-content-between gap-2">
               <div style={{ width: "100%" }}>
-                <select class="form-select form-select-sm" disabled>
-                  <option value={fltr?.label}>{fltr?.label}</option>
+                <select className="form-select form-select-sm" disabled>
+                  <option value={fltr?.label}>{fltr?.label?.split("<")[0]}</option>
                 </select>
               </div>
               <div style={{ width: "100%" }}>
-                <select class="form-select form-select-sm" disabled>
+                <select className="form-select form-select-sm" disabled>
                   <option value="">{fltr.option}</option>
                 </select>
               </div>
@@ -69,21 +84,21 @@ const FilteringModal = ({ setOpen, columns }) => {
           <div className="d-flex align-items-center justify-content-between gap-2">
             <div style={{ width: "100%" }}>
               <select
-                class="form-select form-select-sm"
+                className="form-select form-select-sm"
                 value={filter.label}
                 onChange={(e) => setFilter({ ...filter, label: e.target.value })}
               >
                 <option value=""></option>
                 {columns?.map((col, i) => (
-                  <option key={col.label} value={col.label}>
-                    {col.label}
+                  <option key={col.label} value={col.id}>
+                    {col.label?.split("<")[0]}
                   </option>
                 ))}
               </select>
             </div>
             <div style={{ width: "100%" }}>
               <select
-                class="form-select form-select-sm"
+                className="form-select form-select-sm"
                 value={filter.option}
                 onChange={(e) => setFilter({ ...filter, option: e.target.value })}
               >
@@ -117,7 +132,7 @@ const FilteringModal = ({ setOpen, columns }) => {
         )}
         <button
           type="button"
-          class="btn btn-link btn-sm text-decoration-none px-0"
+          className="btn btn-link btn-sm text-decoration-none px-0"
           onClick={handleAddFilter}
         >
           + Add Filter
@@ -126,10 +141,10 @@ const FilteringModal = ({ setOpen, columns }) => {
 
       {/* apply filter */}
       <div className="d-flex gap-2">
-        <button type="button" class="btn btn-info btn-sm">
+        <button type="button" className="btn btn-info btn-sm" onClick={handleApplyFilter}>
           Apply Filter
         </button>
-        <button type="button" class="btn btn-light btn-sm" onClick={() => setOpen(false)}>
+        <button type="button" className="btn btn-light btn-sm" onClick={() => setOpen(false)}>
           Cancel
         </button>
       </div>
@@ -145,6 +160,5 @@ const filterOptions = [
   "Equal To",
   "Not Equal To",
   "Contains",
-  "In Between",
   "Begins With",
 ];

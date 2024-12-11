@@ -6,10 +6,19 @@ import CustomizeColumn from "../modals/CustomizeColumn";
 import Modal from "../modals/Modal";
 import FilteringModal from "../modals/FilteringModal";
 
-const TableTools = ({ density, setDensity, visibleCol, setVisibleCol, columns, setColumns }) => {
+const TableTools = ({
+  density,
+  setDensity,
+  visibleCol,
+  setVisibleCol,
+  columns,
+  setColumns,
+  applyFilters,
+}) => {
   const [openCustomizeModal, setOpenCustomizeModal] = useState(false);
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [hiddenCol, setHiddenCol] = useState([]);
+
   return (
     <div className="d-flex justify-content-between gap-3 p-2">
       <div>
@@ -48,7 +57,11 @@ const TableTools = ({ density, setDensity, visibleCol, setVisibleCol, columns, s
 
       {openFilterModal && (
         <Modal setOpen={setOpenFilterModal}>
-          <FilteringModal setOpen={setOpenFilterModal} columns={columns} />
+          <FilteringModal
+            setOpen={setOpenFilterModal}
+            columns={columns}
+            applyFilters={applyFilters}
+          />
         </Modal>
       )}
       {openCustomizeModal && (

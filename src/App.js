@@ -34,7 +34,6 @@ function App() {
     fetchData();
   }, [activeTab.apiUri]);
 
-  console.table(data);
   return (
     <div>
       <Tabbar tableTitles={table_titles} activeTab={activeTab} setActiveTab={setActiveTab} />

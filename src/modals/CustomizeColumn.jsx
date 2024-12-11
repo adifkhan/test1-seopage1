@@ -52,7 +52,7 @@ const CustomizeColumn = ({
     <div style={{ width: "min(80vw, 500px)" }}>
       <div className="d-flex align-items-center justify-content-between border-bottom pb-1">
         <h4 className="fw-medium fs-5">Customize Columns</h4>
-        <button type="button" class="btn btn-light" onClick={() => setOpen(false)}>
+        <button type="button" className="btn btn-light" onClick={() => setOpen(false)}>
           <RxCross1 size={20} />
         </button>
       </div>
@@ -100,10 +100,10 @@ const CustomizeColumn = ({
       </div>
       <div className="d-flex align-items-center justify-content-between pt-2">
         <div className="d-flex gap-2">
-          <button type="button" class="btn btn-info btn-sm">
+          <button type="button" className="btn btn-info btn-sm" onClick={() => setOpen(false)}>
             Customize
           </button>
-          <button type="button" class="btn btn-light btn-sm" onClick={() => setOpen(false)}>
+          <button type="button" className="btn btn-light btn-sm" onClick={() => setOpen(false)}>
             Cancel
           </button>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Table from "react-bootstrap/Table";
 import TableTools from "../comps/TableTools";
 
@@ -45,6 +45,17 @@ const NoOfProjects = ({ data }) => {
   const [draggedIndex, setDraggedIndex] = useState(null);
   const [density, setDensity] = useState("md");
 
+  const tableRef = useRef(null);
+  const resizingColumnRef = useRef(null);
+  const startXRef = useRef(0);
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
   // search column data
   useEffect(() => {
     if (searchData.id && searchData.text) {
@@ -57,6 +68,54 @@ const NoOfProjects = ({ data }) => {
     }
   }, [data, searchData.id, searchData.text]);
 
+  const applyFilters = (filters) => {
+    const filteredData = data.filter((item) => {
+      const isMatch = filters.some((query) => {
+        const label = query.label;
+        const option = query.option.toLowerCase();
+        const value = query.value.toLowerCase();
+
+        if (item[label] !== undefined) {
+          const fieldValue = item[label].toString().toLowerCase();
+
+          switch (option) {
+            case "begins with":
+              return fieldValue.startsWith(value);
+            case "contains":
+              return fieldValue.includes(value);
+            case "greater than":
+              const numericFieldValueGT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
+              const numericQueryValueGT = parseFloat(value.replace(/[^0-9.]/g, ""));
+              return (
+                !isNaN(numericFieldValueGT) &&
+                !isNaN(numericQueryValueGT) &&
+                numericFieldValueGT > numericQueryValueGT
+              );
+            case "less than":
+              const numericFieldValueLT = parseFloat(fieldValue.replace(/[^0-9.]/g, ""));
+              const numericQueryValueLT = parseFloat(value.replace(/[^0-9.]/g, ""));
+              return (
+                !isNaN(numericFieldValueLT) &&
+                !isNaN(numericQueryValueLT) &&
+                numericFieldValueLT < numericQueryValueLT
+              );
+            case "equal to":
+              return fieldValue === value;
+            case "not equal to":
+              return fieldValue !== value;
+            default:
+              return false;
+          }
+        }
+
+        return false;
+      });
+      return isMatch ? item : null;
+    });
+
+    setVisibleData(filteredData);
+  };
+
   const swapColumns = (fromIndex, toIndex) => {
     const updatedHeaders = [...columns];
 
@@ -65,6 +124,39 @@ const NoOfProjects = ({ data }) => {
     updatedHeaders.splice(toIndex, 0, movedHeader);
 
     setColumns(updatedHeaders);
+  };
+
+  const handleMouseDown = (event, colIndex) => {
+    event.stopPropagation();
+    resizingColumnRef.current = colIndex;
+    startXRef.current = event.clientX;
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const handleMouseMove = (event) => {
+    if (resizingColumnRef.current === null || !tableRef.current) return;
+
+    const table = tableRef.current;
+    const th = table.querySelectorAll("th")[resizingColumnRef.current];
+    const deltaX = event.clientX - startXRef.current;
+    const newWidth = th.offsetWidth + deltaX;
+
+    const MIN_WIDTH = 140;
+    const MAX_WIDTH = 500;
+
+    if (newWidth >= MIN_WIDTH && newWidth <= MAX_WIDTH) {
+      th.style.width = `${newWidth}px`;
+      th.style.minWidth = `${newWidth}px`;
+      startXRef.current = event.clientX;
+    }
+  };
+
+  const handleMouseUp = () => {
+    resizingColumnRef.current = null;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
   };
 
   return (
@@ -77,16 +169,21 @@ const NoOfProjects = ({ data }) => {
           setVisibleCol={setVisibleCol}
           columns={columns}
           setColumns={setColumns}
+          applyFilters={applyFilters}
         />
       </div>
-      <Table bordered hover style={{ margin: "176px 5px 5px" }}>
+      <Table bordered hover style={{ margin: "176px 5px 5px" }} ref={tableRef}>
         <thead align="center" className="sticky_top">
           <tr className="table_head">
             {columns.map((col, index) => (
               <th
                 key={index}
-                className="fw-medium bg-info p-1"
-                style={{ fontSize: "14px", cursor: "pointer" }}
+                className="fw-medium bg-info p-1 position-relative"
+                style={{
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  minWidth: "140px",
+                }}
                 draggable
                 onDragStart={() => setDraggedIndex(index)}
                 onDragOver={(e) => e.preventDefault()}
@@ -99,6 +196,10 @@ const NoOfProjects = ({ data }) => {
                   placeholder="Search..."
                   onChange={(e) => setSearchData({ id: col.id, text: e.target.value })}
                 />
+                <div
+                  className="resize-handle"
+                  onMouseDown={(event) => handleMouseDown(event, index)}
+                />
               </th>
             ))}
           </tr>
@@ -110,7 +211,7 @@ const NoOfProjects = ({ data }) => {
                 {columns?.map((col, colIndex) => (
                   <td
                     key={colIndex}
-                    className={`align-middle p-1 ${
+                    className={`align-middle p-1 position-relative ${
                       density === "md" ? "py-3" : density === "lg" ? "py-5" : "py-1"
                     }`}
                   >
