@@ -31,7 +31,7 @@ const TableTools = ({
         </button>
       </div>
       <div className="d-flex align-items-center gap-3 ">
-        <div className="d-flex align-items-center gap-2 px-3 border-end border-1 border-secondary">
+        <div className="d-flex align-items-center gap-2 pe-3 border-end border-1 border-secondary">
           <button
             type="button"
             className={`btn btn-sm ${density === "lg" ? "btn-dark" : "btn-outline-dark"}`}

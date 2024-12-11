@@ -5,8 +5,8 @@ const Tabbar = ({ tableTitles, activeTab, setActiveTab }) => {
     <div className="tab_bar pt-1 bg-light">
       <div className="d-flex border-top border-bottom p-2">
         <div
-          className="no_scrollbar d-flex flex-wrap justify-content-center gap-1"
-          style={{ height: "100px", overflowY: "scroll" }}
+          className="no_scrollbar overflow-scroll d-flex flex-wrap gap-1 "
+          style={{ height: "100px" }}
         >
           {tableTitles?.map((table) => (
             <span
