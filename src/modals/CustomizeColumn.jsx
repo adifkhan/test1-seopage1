@@ -92,10 +92,14 @@ const CustomizeColumn = ({
       </div>
       <div className="d-flex align-items-center justify-content-between pt-2">
         <div className="d-flex gap-2">
-          <button type="button" className="btn btn-info btn-sm" onClick={() => setOpen(false)}>
+          <button type="button" className="btn btn-sm btn-info" onClick={() => setOpen(false)}>
             Customize
           </button>
-          <button type="button" className="btn btn-light btn-sm" onClick={() => setOpen(false)}>
+          <button
+            type="button"
+            className="btn btn-outline-dark btn-sm"
+            onClick={() => setOpen(false)}
+          >
             Cancel
           </button>
         </div>

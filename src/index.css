@@ -1,3 +1,4 @@
+/* tab bar styles */
 .tab_bar {
   position: fixed;
   top: 0;
@@ -5,6 +6,21 @@
   right: 0;
   z-index: 105;
 }
+.table_title_btn {
+  height: fit-content;
+  padding: 3px 15px;
+  border-radius: 20px;
+  text-wrap: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: 0.5s;
+
+  &:hover {
+    border-color: #9e9c9c;
+  }
+}
+
+/* table styles */
 .table_head {
   border-top: none;
 
@@ -33,6 +49,7 @@
   filter: drop-shadow(3px 0 5px rgba(0, 0, 0, 0.1));
   z-index: 99;
 }
+
 .search_input {
   margin-top: 5px;
   min-width: 100px;
@@ -44,6 +61,16 @@
     border-color: #000;
   }
 }
+.table_toolbar {
+  position: fixed;
+  top: 122px;
+  left: 0;
+  right: 0;
+  z-index: 102;
+  background: white;
+}
+
+/* customize modal styles */
 .columns_stack {
   display: flex;
   align-items: center;
@@ -56,21 +83,8 @@
     border-color: rgb(199, 198, 198);
   }
 }
-.table_toolbar {
-  position: fixed;
-  top: 122px;
-  left: 0;
-  right: 0;
-  z-index: 102;
-  background: white;
-}
-.dense_button {
-  transition: all 0.5s;
-  &:hover {
-    background: black;
-    color: white;
-  }
-}
+
+/* common styles */
 .no_scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -22,35 +22,43 @@ const TableTools = ({
   return (
     <div className="d-flex justify-content-between gap-3 p-2">
       <div>
-        <button type="button" className="btn btn-info" onClick={() => setOpenFilterModal(true)}>
+        <button
+          type="button"
+          className="btn btn-outline-dark"
+          onClick={() => setOpenFilterModal(true)}
+        >
           Filter Columns
         </button>
       </div>
       <div className="d-flex align-items-center gap-3 ">
         <div className="d-flex align-items-center gap-2">
-          <span
-            className="dense_button border px-2 py-1 rounded"
-            style={{ cursor: "pointer", color: density === "lg" ? "black" : "lightgray" }}
+          <button
+            type="button"
+            className={`btn btn-sm ${density === "lg" ? "btn-dark" : "btn-outline-dark"}`}
             onClick={() => setDensity("lg")}
           >
             <AiOutlineMenu size={24} />
-          </span>
-          <span
-            className="dense_button border px-2 py-1 rounded"
-            style={{ cursor: "pointer", color: density === "md" ? "black" : "lightgray" }}
+          </button>
+          <button
+            type="button"
+            className={`btn btn-sm ${density === "md" ? "btn-dark" : "btn-outline-dark"}`}
             onClick={() => setDensity("md")}
           >
             <GiHamburgerMenu size={24} />
-          </span>
-          <span
-            className="dense_button border px-2 py-1 rounded"
-            style={{ cursor: "pointer", color: density === "sm" ? "black" : "lightgray" }}
+          </button>
+          <button
+            type="button"
+            className={`btn btn-sm ${density === "sm" ? "btn-dark" : "btn-outline-dark"}`}
             onClick={() => setDensity("sm")}
           >
             <ImMenu size={24} />
-          </span>
+          </button>
         </div>
-        <button type="button" className="btn btn-dark" onClick={() => setOpenCustomizeModal(true)}>
+        <button
+          type="button"
+          className="btn btn-outline-dark fw-medium"
+          onClick={() => setOpenCustomizeModal(true)}
+        >
           Customize
         </button>
       </div>

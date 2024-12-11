@@ -144,7 +144,11 @@ const FilteringModal = ({ setOpen, columns, applyFilters }) => {
         <button type="button" className="btn btn-info btn-sm" onClick={handleApplyFilter}>
           Apply Filter
         </button>
-        <button type="button" className="btn btn-light btn-sm" onClick={() => setOpen(false)}>
+        <button
+          type="button"
+          className="btn btn-outline-dark btn-sm"
+          onClick={() => setOpen(false)}
+        >
           Cancel
         </button>
       </div>
