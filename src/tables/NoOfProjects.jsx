@@ -55,6 +55,7 @@ const NoOfProjects = ({ data }) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // update visible data depending on column search
