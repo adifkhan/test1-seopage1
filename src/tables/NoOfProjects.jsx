@@ -147,7 +147,10 @@ const NoOfProjects = ({ data }) => {
                 />
                 <div
                   className="resize-handle"
-                  onMouseDown={(event) => handleMouseDown(event, index)}
+                  onMouseDown={(event) => {
+                    event.stopPropagation();
+                    handleMouseDown(event, index);
+                  }}
                 />
               </th>
             ))}

@@ -112,7 +112,10 @@ const PredefinedCycle = ({ data }) => {
                   />
                   <div
                     className="resize-handle"
-                    onMouseDown={(event) => handleMouseDown(event, index)}
+                    onMouseDown={(event) => {
+                      event.stopPropagation();
+                      handleMouseDown(event, index);
+                    }}
                   />
                 </th>
               ) : col.id === "project_manager" ? (
@@ -135,7 +138,10 @@ const PredefinedCycle = ({ data }) => {
                     />
                     <div
                       className="resize-handle"
-                      onMouseDown={(event) => handleMouseDown(event, index)}
+                      onMouseDown={(event) => {
+                        event.stopPropagation();
+                        handleMouseDown(event, index);
+                      }}
                     />
                   </div>
                 </th>
@@ -158,7 +164,10 @@ const PredefinedCycle = ({ data }) => {
                   />
                   <div
                     className="resize-handle"
-                    onMouseDown={(event) => handleMouseDown(event, index)}
+                    onMouseDown={(event) => {
+                      event.stopPropagation();
+                      handleMouseDown(event, index);
+                    }}
                   />
                 </th>
               )
